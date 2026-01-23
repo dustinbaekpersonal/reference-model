@@ -63,8 +63,3 @@ class OpenFigiApi(GeneralVendorApi):
 
         results = pl.DataFrame(results)
         return results
-
-
-if __name__ == "__main__":
-    print(OpenFigiApi.get_available_symbol_types())
-
