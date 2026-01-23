@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "loguru>=0.7.3",
+    "polars>=1.37.1",
+    "psycopg[binary]>=3.3.2",
     "python-dotenv>=1.2.1",
     "requests>=2.32.5",
 ]
