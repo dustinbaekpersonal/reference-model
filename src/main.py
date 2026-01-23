@@ -1,10 +1,8 @@
-
 import polars as pl
 from loguru import logger
 
 from .db.postgres import PgConnector
 from .vendor.open_figi import OpenFigiApi
-
 
 
 def main():
@@ -16,12 +14,10 @@ def main():
     # )
     df = pl.DataFrame(
         {
-            "instrument_type_id": list(range(1,4)),
-            "name": ["Company", "Equity", "EquityListing"]
-        }, schema={
-            "instrument_type_id": pl.Int16,
-            "name": pl.String
-        }
+            "instrument_type_id": list(range(1, 4)),
+            "name": ["Company", "Equity", "EquityListing"],
+        },
+        schema={"instrument_type_id": pl.Int16, "name": pl.String},
     )
     with PgConnector("reference") as ref_pg:
         # ref_pg.copy(df, "instrument_types")

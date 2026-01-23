@@ -1,4 +1,3 @@
-
 import io
 from typing import Self
 
@@ -115,7 +114,7 @@ class PgConnector:
             pl.DataType | None: The corresponding Polars data type.
         """
         return self._pg_to_pl_dtype.get(pg_dtype)
-    
+
     @raise_if_not_connected
     def copy(self, df: pl.DataFrame, table_name: str) -> None:
         """
@@ -124,7 +123,7 @@ class PgConnector:
         Args:
             df (pl.DataFrame): The DataFrame to copy.
             table_name (str): The name of the table to copy to.
-        
+
         Raises:
             RuntimeError: If not connected to the database.
         """
@@ -134,7 +133,7 @@ class PgConnector:
 
         with self._conn.cursor() as cur:
             stmt = f"""
-            COPY {table_name} ({', '.join(df.columns)})
+            COPY {table_name} ({", ".join(df.columns)})
             FROM STDIN WITH (FORMAT CSV, HEADER)
             """
             cur.copy(stmt, buffer)
@@ -143,7 +142,7 @@ class PgConnector:
             count = cur.fetchone()[0]
             logger.warning(f"Row count after COPY (before commit): {count}")
         self._conn.commit()
-    
+
     @raise_if_not_connected
     def write(self, df: pl.DataFrame, table_name: str, insert_mode: str) -> None:
         """
@@ -152,7 +151,7 @@ class PgConnector:
         Args:
             df (pl.DataFrame): The DataFrame to write.
             table_name (str): The name of the table to write to.
-        
+
         Raises:
             RuntimeError: If not connected to the database.
         """
@@ -160,7 +159,7 @@ class PgConnector:
             table_name=table_name,
             connection=self._conn_uri,
             engine="adbc",
-            if_table_exists=insert_mode
+            if_table_exists=insert_mode,
         )
         logger.info(
             f"Written {df.shape} DataFrame to table {table_name} with {insert_mode} mode"

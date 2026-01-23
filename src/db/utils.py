@@ -1,5 +1,5 @@
-
 from functools import wraps
+
 
 def raise_if_not_connected(func):
     @wraps(func)
@@ -7,5 +7,5 @@ def raise_if_not_connected(func):
         if not self._conn:
             raise RuntimeError("Not connected to database")
         return func(self, *args, **kwargs)
-    return wrapper
 
+    return wrapper
