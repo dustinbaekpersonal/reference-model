@@ -5,6 +5,7 @@ from loguru import logger
 
 load_dotenv()
 
+
 def main():
     api_key = os.environ.get("marketstack_api_key")
     logger.info("Hello from reference-model!")
