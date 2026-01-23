@@ -1,4 +1,3 @@
-
 import httpx
 import polars as pl
 from bs4 import BeautifulSoup
@@ -11,7 +10,7 @@ class OpenFigiApi(GeneralVendorApi):
         super().__init__(base_url, api_key)
         if self.api_key:
             self.header |= {"X-OPENFIGI-APIKEY": self.api_key}
-            
+
     def get_available_symbol_types(self) -> pl.DataFrame:
         """
         Get available symbol types provided by OpenFigi.
@@ -26,7 +25,7 @@ class OpenFigiApi(GeneralVendorApi):
         with httpx.Client(timeout=10) as client:
             response = client.get(url)
             response.raise_for_status()
-        
+
         soup = BeautifulSoup(response.text, "lxml")
 
         # Find the header for "idType Values"
@@ -57,10 +56,9 @@ class OpenFigiApi(GeneralVendorApi):
                 {
                     "symbol": symbol,
                     "description": desc.strip(),
-                    "example": example.strip()
+                    "example": example.strip(),
                 }
             )
 
         results = pl.DataFrame(results)
         return results
-
