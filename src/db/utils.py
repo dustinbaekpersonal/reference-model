@@ -2,6 +2,7 @@ from typing import Self
 
 import psycopg
 import polars as pl
+from loguru import logger
 
 
 class PgConnector:
@@ -44,7 +45,6 @@ class PgConnector:
         Close the connection to the Postgres database.
         """
         if self._conn:
-            breakpoint()
             self._conn.close()
             self._conn = None
 
@@ -97,6 +97,7 @@ class PgConnector:
                 return df.lazy() if lazy else df
             else:
                 self._conn.commit()
+                logger.info(f"Executed query: {sql}")
                 return None
 
     def _convert_dtype_pg_to_pl(self, pg_dtype: int) -> pl.DataType | None:
@@ -114,5 +115,7 @@ class PgConnector:
 
 if __name__ == "__main__":
     with PgConnector("reference") as conn:
-        query = "SELECT * FROM test.symbols;"
+        query = """
+        SELECT * FROM vendors;
+        """
         print(conn.execute(query))
