@@ -11,7 +11,8 @@ class OpenFigiApi(GeneralVendorApi):
         if self.api_key:
             self.header |= {"X-OPENFIGI-APIKEY": self.api_key}
 
-    def get_available_symbol_types(self) -> pl.DataFrame:
+    @staticmethod
+    def get_available_symbol_types() -> pl.DataFrame:
         """
         Get available symbol types provided by OpenFigi.
 
@@ -62,3 +63,8 @@ class OpenFigiApi(GeneralVendorApi):
 
         results = pl.DataFrame(results)
         return results
+
+
+if __name__ == "__main__":
+    print(OpenFigiApi.get_available_symbol_types())
+
