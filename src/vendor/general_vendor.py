@@ -1,6 +1,8 @@
-from abc import ABC
+import abc
 
-class GeneralVendorApi(ABC):
+import polars as pl
+
+class GeneralVendorApi(abc.ABC):
     """
     Api for general vendor that handles header and etc.
     """
@@ -10,4 +12,8 @@ class GeneralVendorApi(ABC):
         self.api_key = api_key
         self.header = {"Content-Type": "application/json"}
     
-    
+    @abc.abstractmethod
+    def get_available_symbol_types(self) -> pl.DataFrame:
+        """
+        Get available symbol types provided by the vendor.
+        """
