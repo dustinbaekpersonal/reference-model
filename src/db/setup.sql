@@ -12,7 +12,12 @@ CREATE TABLE symbol_details (
 	symbol_detail_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	symbol_id INT NOT NULL,
 	description TEXT,
-	example TEXT
+	example TEXT,
+
+	CONSTRAINT fk_symbol_details_symbol
+		FOREIGN KEY (symbol_id)
+		REFERENCES symbols (symbol_id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE vendors (
@@ -20,7 +25,7 @@ CREATE TABLE vendors (
 	name TEXT NOT NULL
 );
 
-CREATE TABLE instrument_type (
+CREATE TABLE instrument_types (
 	instrument_type_id SMALLINT PRIMARY KEY,
 	name TEXT NOT NULL
 );

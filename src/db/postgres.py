@@ -96,7 +96,7 @@ class PgConnector:
                     for desc in descs
                 }
                 rows = cur.fetchall()
-                df = pl.DataFrame(rows, schema=schema)
+                df = pl.DataFrame(rows, schema=schema, orient="row")
                 return df.lazy() if lazy else df
             else:
                 self._conn.commit()
@@ -144,13 +144,17 @@ class PgConnector:
         self._conn.commit()
 
     @raise_if_not_connected
-    def write(self, df: pl.DataFrame, table_name: str, insert_mode: str) -> None:
+    def write(self, df: pl.DataFrame, table_name: str, insert_mode: str = "append") -> None:
         """
         Write a Polars DataFrame to a table in the database.
 
         Args:
             df (pl.DataFrame): The DataFrame to write.
             table_name (str): The name of the table to write to.
+            insert_mode (str): The mode to use for writing. Defaults to "append".
+                - "append": Append the DataFrame to the table.
+                - "replace": Replace the table with the DataFrame.
+                - "fail": Fail if the table already exists.
 
         Raises:
             RuntimeError: If not connected to the database.
