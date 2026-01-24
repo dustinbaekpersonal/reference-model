@@ -1,5 +1,4 @@
 import polars as pl
-from loguru import logger
 
 from .db.postgres import PgConnector
 from .vendor.open_figi import OpenFigiApi
@@ -23,22 +22,15 @@ def main():
     # symbol details
     avail_df = OpenFigiApi.get_available_symbol_types()
     avail_df = avail_df.select(
-        pl.col("symbol").alias("name"),
-        pl.col("description", "example")
+        pl.col("symbol").alias("name"), pl.col("description", "example")
     )
     with PgConnector("reference") as ref_pg:
         symbol_df = ref_pg.execute("SELECT * FROM symbols;")
-    
+
     symbol_details_df = avail_df.join(
-        symbol_df,
-        on="name",
-        how="inner",
-        validate="1:1",
-        maintain_order="left"
-    ).select(
-        pl.col("symbol_id", "description", "example")
-    )
-    
+        symbol_df, on="name", how="inner", validate="1:1", maintain_order="left"
+    ).select(pl.col("symbol_id", "description", "example"))
+
     # # instrument types
     # df = pl.DataFrame(
     #     {

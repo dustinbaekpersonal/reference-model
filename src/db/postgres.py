@@ -144,7 +144,9 @@ class PgConnector:
         self._conn.commit()
 
     @raise_if_not_connected
-    def write(self, df: pl.DataFrame, table_name: str, insert_mode: str = "append") -> None:
+    def write(
+        self, df: pl.DataFrame, table_name: str, insert_mode: str = "append"
+    ) -> None:
         """
         Write a Polars DataFrame to a table in the database.
 
