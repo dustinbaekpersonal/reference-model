@@ -103,7 +103,9 @@ class OpenFigiApi(GeneralVendorApi):
         logger.info(f"Mapping values for {key}: {len(res)}")
         return pl.DataFrame(res).rename({"values": key})
 
-    def search_symbols(self, payload: dict, start: str | None = None) -> tuple[pl.DataFrame, str | None]:
+    def search_symbols(
+        self, payload: dict, start: str | None = None
+    ) -> tuple[pl.DataFrame, str | None]:
         """"""
         with httpx.Client() as client:
             res = client.post(
@@ -117,6 +119,3 @@ class OpenFigiApi(GeneralVendorApi):
         logger.info(f"Search symbols: {len(res)}" + f" Next: {nxt}" if nxt else "")
 
         return pl.DataFrame(res), nxt
-            
-
-            
