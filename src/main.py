@@ -52,7 +52,7 @@ def main():
     symbol_details_df = avail_df.join(
         existing_symbol_df, on="name", how="inner", validate="1:1", maintain_order="left"
     ).select(pl.col("symbol_id", "description", "example"))
-    existing_symbol_details_df = _fetch_existing_if_not_insert(
+    _fetch_existing_if_not_insert(
         symbol_details_df, "reference", "symbol_details"
     )
 
@@ -64,7 +64,7 @@ def main():
         },
         schema={"instrument_type_id": pl.Int16, "name": pl.String},
     )
-    existing_instrument_types_df = _fetch_existing_if_not_insert(
+    _fetch_existing_if_not_insert(
         instrument_types_df, "reference", "instrument_types"
     )
 
