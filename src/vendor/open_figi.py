@@ -1,12 +1,13 @@
 import httpx
 import polars as pl
 from bs4 import BeautifulSoup
+from loguru import logger
 
 from .general_vendor import GeneralVendorApi
 
 
 class OpenFigiApi(GeneralVendorApi):
-    BASE_URL = r"https://api.openfigi.com/v{}"
+    BASE_URL = r"https://api.openfigi.com/v{}/"
 
     def __init__(self, version: int = 3, api_key: str | None = None):
         self.base_url = OpenFigiApi.BASE_URL.format(version)
@@ -17,6 +18,9 @@ class OpenFigiApi(GeneralVendorApi):
     @staticmethod
     def get_available_symbol_types() -> pl.DataFrame:
         """
+        TODO: 2026/03/31, turns out at least available idTypes can be fetched from
+        get_mapping_values("idType").
+
         Get available symbol types provided by OpenFigi.
 
         This webscrapes the OpenFigi website to get the available symbol types.
@@ -66,3 +70,27 @@ class OpenFigiApi(GeneralVendorApi):
 
         results = pl.DataFrame(results)
         return results
+
+    def get_mapping_values(self, key: str) -> pl.DataFrame:
+        """"""
+        if key not in (
+            allowed_keys := {
+                "idType",
+                "exchCode",
+                "micCode",
+                "currency",
+                "marketSecDes",
+                "securityType",
+                "securityType2",
+                "stateCode",
+            }
+        ):
+            raise ValueError(f"Invalid key: {key}. Allowed keys: {allowed_keys}")
+
+        url = self.base_url + f"mapping/values/{key}"
+
+        with httpx.Client() as client:
+            res = client.get(url).json()
+
+        logger.info(f"Mapping values for {key}: {len(res)}")
+        return pl.DataFrame(res)

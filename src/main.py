@@ -29,7 +29,7 @@ def _fetch_existing_if_not_insert(
     return existing_df
 
 
-def main():
+def _check_all_ref_tables():
     # available symbol types
     avail_df = OpenFigiApi.get_available_symbol_types().rename({"symbol": "name"})
 
@@ -67,6 +67,15 @@ def main():
         schema={"instrument_type_id": pl.Int16, "name": pl.String},
     )
     _fetch_existing_if_not_insert(instrument_types_df, "reference", "instrument_types")
+
+
+def main():
+    open_figi = OpenFigiApi()
+    open_figi.get_mapping_values("idType")
+
+    with PgConnector("reference") as pg_conn:
+        pg_conn.execute("SELECT * FROM symbols;")
+    breakpoint()
 
 
 if __name__ == "__main__":
