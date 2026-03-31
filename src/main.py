@@ -71,11 +71,7 @@ def _check_all_ref_tables():
 
 def main():
     open_figi = OpenFigiApi()
-    open_figi.get_mapping_values("idType")
-
-    with PgConnector("reference") as pg_conn:
-        pg_conn.execute("SELECT * FROM symbols;")
-    breakpoint()
+    open_figi.get_mapping_values("stateCode")
 
 
 if __name__ == "__main__":

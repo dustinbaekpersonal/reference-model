@@ -72,7 +72,15 @@ class OpenFigiApi(GeneralVendorApi):
         return results
 
     def get_mapping_values(self, key: str) -> pl.DataFrame:
-        """"""
+        """
+        Get the current list of values for the enum-like properties on Mapping Jobs.
+
+        Args:
+            key (str): The key to fetch values for.
+
+        Returns:
+            pl.DataFrame: A Polars DataFrame containing the values for the specified key.
+        """
         if key not in (
             allowed_keys := {
                 "idType",
@@ -93,4 +101,4 @@ class OpenFigiApi(GeneralVendorApi):
             res = client.get(url).json()
 
         logger.info(f"Mapping values for {key}: {len(res)}")
-        return pl.DataFrame(res)
+        return pl.DataFrame(res).rename({"values": key})
