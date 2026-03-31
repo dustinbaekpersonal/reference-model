@@ -71,7 +71,8 @@ def _check_all_ref_tables():
 
 def main():
     open_figi = OpenFigiApi()
-    open_figi.get_mapping_values("stateCode")
+    df, _ = open_figi.search_symbols({"query": "ibm", "exchCode": "US"})
+    breakpoint()
 
 
 if __name__ == "__main__":

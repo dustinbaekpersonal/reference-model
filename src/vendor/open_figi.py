@@ -95,10 +95,28 @@ class OpenFigiApi(GeneralVendorApi):
         ):
             raise ValueError(f"Invalid key: {key}. Allowed keys: {allowed_keys}")
 
-        url = self.base_url + f"mapping/values/{key}"
-
         with httpx.Client() as client:
-            res = client.get(url).json()
+            res = client.get(self.base_url + f"mapping/values/{key}")
+            res.raise_for_status()
+            res = res.json()
 
         logger.info(f"Mapping values for {key}: {len(res)}")
         return pl.DataFrame(res).rename({"values": key})
+
+    def search_symbols(self, payload: dict, start: str | None = None) -> tuple[pl.DataFrame, str | None]:
+        """"""
+        with httpx.Client() as client:
+            res = client.post(
+                self.base_url + "search",
+                json=payload | {"start": start} if start else payload,
+            )
+            res.raise_for_status()
+            res = res.json()
+
+        res, nxt = res["data"], res["next"]
+        logger.info(f"Search symbols: {len(res)}" + f" Next: {nxt}" if nxt else "")
+
+        return pl.DataFrame(res), nxt
+            
+
+            

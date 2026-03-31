@@ -18,3 +18,9 @@ class GeneralVendorApi(abc.ABC):
         """
         Get available symbol types provided by the vendor.
         """
+    
+    @abc.abstractmethod
+    def search_symbols(self, payload: dict, *args, **kwargs) -> pl.DataFrame:
+        """
+        Search for symbols provided by the vendor.
+        """
